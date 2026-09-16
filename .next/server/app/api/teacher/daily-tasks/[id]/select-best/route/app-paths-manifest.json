@@ -1,0 +1,3 @@
+{
+  "/api/teacher/daily-tasks/[id]/select-best/route": "app/api/teacher/daily-tasks/[id]/select-best/route.js"
+}

@@ -1,0 +1,3 @@
+{
+  "/api/teacher/daily-tasks/[id]/toggle/route": "app/api/teacher/daily-tasks/[id]/toggle/route.js"
+}

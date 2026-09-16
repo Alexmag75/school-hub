@@ -1,0 +1,587 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "onMatchHeaders": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/admin/users/edit/[id]",
+      "regex": "^/admin/users/edit/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/admin/users/edit/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/admin/teachers/[id]/activity",
+      "regex": "^/api/admin/teachers/([^/]+?)/activity(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/admin/teachers/(?<nxtPid>[^/]+?)/activity(?:/)?$"
+    },
+    {
+      "page": "/api/admin/textbooks/[id]",
+      "regex": "^/api/admin/textbooks/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/admin/textbooks/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/admin/users/[id]",
+      "regex": "^/api/admin/users/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/admin/users/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/admin/users/[id]/reset-password",
+      "regex": "^/api/admin/users/([^/]+?)/reset\\-password(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/admin/users/(?<nxtPid>[^/]+?)/reset\\-password(?:/)?$"
+    },
+    {
+      "page": "/api/auth/[...nextauth]",
+      "regex": "^/api/auth/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPnextauth": "nxtPnextauth"
+      },
+      "namedRegex": "^/api/auth/(?<nxtPnextauth>.+?)(?:/)?$"
+    },
+    {
+      "page": "/api/daily-tasks/[id]/archive",
+      "regex": "^/api/daily\\-tasks/([^/]+?)/archive(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/daily\\-tasks/(?<nxtPid>[^/]+?)/archive(?:/)?$"
+    },
+    {
+      "page": "/api/daily-tasks/[id]/comments",
+      "regex": "^/api/daily\\-tasks/([^/]+?)/comments(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/daily\\-tasks/(?<nxtPid>[^/]+?)/comments(?:/)?$"
+    },
+    {
+      "page": "/api/student/materials/[id]",
+      "regex": "^/api/student/materials/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/student/materials/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/student/notifications/[id]/read",
+      "regex": "^/api/student/notifications/([^/]+?)/read(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/student/notifications/(?<nxtPid>[^/]+?)/read(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/daily-tasks/[id]/archive",
+      "regex": "^/api/teacher/daily\\-tasks/([^/]+?)/archive(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/teacher/daily\\-tasks/(?<nxtPid>[^/]+?)/archive(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/daily-tasks/[id]/comments",
+      "regex": "^/api/teacher/daily\\-tasks/([^/]+?)/comments(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/teacher/daily\\-tasks/(?<nxtPid>[^/]+?)/comments(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/daily-tasks/[id]/select-best",
+      "regex": "^/api/teacher/daily\\-tasks/([^/]+?)/select\\-best(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/teacher/daily\\-tasks/(?<nxtPid>[^/]+?)/select\\-best(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/daily-tasks/[id]/toggle",
+      "regex": "^/api/teacher/daily\\-tasks/([^/]+?)/toggle(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/teacher/daily\\-tasks/(?<nxtPid>[^/]+?)/toggle(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/materials/[id]",
+      "regex": "^/api/teacher/materials/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/teacher/materials/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/textbooks/[id]",
+      "regex": "^/api/teacher/textbooks/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/teacher/textbooks/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/teacher-news/[id]",
+      "regex": "^/api/teacher\\-news/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/teacher\\-news/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/student/lessons/[id]",
+      "regex": "^/student/lessons/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/student/lessons/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/student/quiz/[id]",
+      "regex": "^/student/quiz/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/student/quiz/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/teacher/journal/[subjectId]/[classId]",
+      "regex": "^/teacher/journal/([^/]+?)/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPsubjectId": "nxtPsubjectId",
+        "nxtPclassId": "nxtPclassId"
+      },
+      "namedRegex": "^/teacher/journal/(?<nxtPsubjectId>[^/]+?)/(?<nxtPclassId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/teacher/lessons/[id]",
+      "regex": "^/teacher/lessons/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/teacher/lessons/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/teacher/lessons/[id]/edit",
+      "regex": "^/teacher/lessons/([^/]+?)/edit(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/teacher/lessons/(?<nxtPid>[^/]+?)/edit(?:/)?$"
+    },
+    {
+      "page": "/teacher/quizzes/[id]",
+      "regex": "^/teacher/quizzes/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/teacher/quizzes/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/teacher/quizzes/[id]/edit",
+      "regex": "^/teacher/quizzes/([^/]+?)/edit(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/teacher/quizzes/(?<nxtPid>[^/]+?)/edit(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/admin/classes",
+      "regex": "^/admin/classes(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/classes(?:/)?$"
+    },
+    {
+      "page": "/admin/logs",
+      "regex": "^/admin/logs(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/logs(?:/)?$"
+    },
+    {
+      "page": "/admin/settings",
+      "regex": "^/admin/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/settings(?:/)?$"
+    },
+    {
+      "page": "/admin/textbooks",
+      "regex": "^/admin/textbooks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/textbooks(?:/)?$"
+    },
+    {
+      "page": "/admin/users",
+      "regex": "^/admin/users(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/users(?:/)?$"
+    },
+    {
+      "page": "/admin/users/create",
+      "regex": "^/admin/users/create(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/users/create(?:/)?$"
+    },
+    {
+      "page": "/api/admin/activity",
+      "regex": "^/api/admin/activity(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/activity(?:/)?$"
+    },
+    {
+      "page": "/api/admin/analytics/academic",
+      "regex": "^/api/admin/analytics/academic(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/analytics/academic(?:/)?$"
+    },
+    {
+      "page": "/api/admin/analytics/system",
+      "regex": "^/api/admin/analytics/system(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/analytics/system(?:/)?$"
+    },
+    {
+      "page": "/api/admin/analytics/users",
+      "regex": "^/api/admin/analytics/users(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/analytics/users(?:/)?$"
+    },
+    {
+      "page": "/api/admin/classes",
+      "regex": "^/api/admin/classes(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/classes(?:/)?$"
+    },
+    {
+      "page": "/api/admin/logs",
+      "regex": "^/api/admin/logs(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/logs(?:/)?$"
+    },
+    {
+      "page": "/api/admin/settings",
+      "regex": "^/api/admin/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/settings(?:/)?$"
+    },
+    {
+      "page": "/api/admin/subjects",
+      "regex": "^/api/admin/subjects(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/subjects(?:/)?$"
+    },
+    {
+      "page": "/api/admin/teachers",
+      "regex": "^/api/admin/teachers(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/teachers(?:/)?$"
+    },
+    {
+      "page": "/api/admin/textbooks",
+      "regex": "^/api/admin/textbooks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/textbooks(?:/)?$"
+    },
+    {
+      "page": "/api/admin/users",
+      "regex": "^/api/admin/users(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/users(?:/)?$"
+    },
+    {
+      "page": "/api/admin/users/bulk",
+      "regex": "^/api/admin/users/bulk(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/users/bulk(?:/)?$"
+    },
+    {
+      "page": "/api/daily-tasks",
+      "regex": "^/api/daily\\-tasks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/daily\\-tasks(?:/)?$"
+    },
+    {
+      "page": "/api/daily-tasks/archive",
+      "regex": "^/api/daily\\-tasks/archive(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/daily\\-tasks/archive(?:/)?$"
+    },
+    {
+      "page": "/api/daily-tasks/leaderboard",
+      "regex": "^/api/daily\\-tasks/leaderboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/daily\\-tasks/leaderboard(?:/)?$"
+    },
+    {
+      "page": "/api/home/daily-task",
+      "regex": "^/api/home/daily\\-task(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/home/daily\\-task(?:/)?$"
+    },
+    {
+      "page": "/api/home/top-students",
+      "regex": "^/api/home/top\\-students(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/home/top\\-students(?:/)?$"
+    },
+    {
+      "page": "/api/news",
+      "regex": "^/api/news(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/news(?:/)?$"
+    },
+    {
+      "page": "/api/rating",
+      "regex": "^/api/rating(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/rating(?:/)?$"
+    },
+    {
+      "page": "/api/student/dashboard-stats",
+      "regex": "^/api/student/dashboard\\-stats(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/student/dashboard\\-stats(?:/)?$"
+    },
+    {
+      "page": "/api/student/notifications",
+      "regex": "^/api/student/notifications(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/student/notifications(?:/)?$"
+    },
+    {
+      "page": "/api/student/notifications/read-all",
+      "regex": "^/api/student/notifications/read\\-all(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/student/notifications/read\\-all(?:/)?$"
+    },
+    {
+      "page": "/api/student/quiz/submit",
+      "regex": "^/api/student/quiz/submit(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/student/quiz/submit(?:/)?$"
+    },
+    {
+      "page": "/api/student/tasks",
+      "regex": "^/api/student/tasks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/student/tasks(?:/)?$"
+    },
+    {
+      "page": "/api/subjects",
+      "regex": "^/api/subjects(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/subjects(?:/)?$"
+    },
+    {
+      "page": "/api/teacher",
+      "regex": "^/api/teacher(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/teacher(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/daily-tasks",
+      "regex": "^/api/teacher/daily\\-tasks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/teacher/daily\\-tasks(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/journal/column",
+      "regex": "^/api/teacher/journal/column(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/teacher/journal/column(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/journal/grade",
+      "regex": "^/api/teacher/journal/grade(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/teacher/journal/grade(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/materials",
+      "regex": "^/api/teacher/materials(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/teacher/materials(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/my-data",
+      "regex": "^/api/teacher/my\\-data(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/teacher/my\\-data(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/textbooks",
+      "regex": "^/api/teacher/textbooks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/teacher/textbooks(?:/)?$"
+    },
+    {
+      "page": "/api/teacher/topics",
+      "regex": "^/api/teacher/topics(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/teacher/topics(?:/)?$"
+    },
+    {
+      "page": "/api/teacher-news",
+      "regex": "^/api/teacher\\-news(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/teacher\\-news(?:/)?$"
+    },
+    {
+      "page": "/api/upload",
+      "regex": "^/api/upload(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/upload(?:/)?$"
+    },
+    {
+      "page": "/archive",
+      "regex": "^/archive(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/archive(?:/)?$"
+    },
+    {
+      "page": "/daily-tasks/archive",
+      "regex": "^/daily\\-tasks/archive(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/daily\\-tasks/archive(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/news",
+      "regex": "^/news(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/news(?:/)?$"
+    },
+    {
+      "page": "/rating",
+      "regex": "^/rating(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/rating(?:/)?$"
+    },
+    {
+      "page": "/student",
+      "regex": "^/student(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/student(?:/)?$"
+    },
+    {
+      "page": "/student/library",
+      "regex": "^/student/library(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/student/library(?:/)?$"
+    },
+    {
+      "page": "/student/subjects",
+      "regex": "^/student/subjects(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/student/subjects(?:/)?$"
+    },
+    {
+      "page": "/teacher",
+      "regex": "^/teacher(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/teacher(?:/)?$"
+    },
+    {
+      "page": "/teacher/lessons/create",
+      "regex": "^/teacher/lessons/create(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/teacher/lessons/create(?:/)?$"
+    },
+    {
+      "page": "/teacher/library",
+      "regex": "^/teacher/library(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/teacher/library(?:/)?$"
+    },
+    {
+      "page": "/teacher/quizzes/create",
+      "regex": "^/teacher/quizzes/create(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/teacher/quizzes/create(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

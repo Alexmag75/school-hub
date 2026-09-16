@@ -1,0 +1,3 @@
+{
+  "/api/teacher/daily-tasks/[id]/comments/route": "app/api/teacher/daily-tasks/[id]/comments/route.js"
+}
