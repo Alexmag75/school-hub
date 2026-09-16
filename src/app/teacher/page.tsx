@@ -13,7 +13,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import TeacherDailyTasks from "@/components/teacher/TeacherDailyTasks";
@@ -54,7 +54,8 @@ interface MaterialItem {
     assignments?: { class: { id: string; name: string } }[];
 }
 
-export default function TeacherDashboard() {
+// 1. Внутрішній компонент, що містить логіку та працює з useSearchParams()
+function TeacherDashboardContent() {
     const searchParams = useSearchParams();
 
     // Стани початкових даних вчителя
@@ -79,7 +80,6 @@ export default function TeacherDashboard() {
     // Активна вкладка дашбуарду: уроки, тести чи журнал оцінок
     const [activeTab, setActiveTab] = useState<"lessons" | "quizzes" | "journal" | "tasks" | "news">("lessons");
 
-
     /**
      * Ефект: синхронізація активної вкладки зі значенням параметра "tab" у URL
      */
@@ -103,7 +103,6 @@ export default function TeacherDashboard() {
                 if (res.ok) {
                     const data = await res.json();
 
-                    // Призначаємо ПІБ зі зчитаного user.fullName
                     if (data.user?.fullName) {
                         setTeacherName(data.user.fullName);
                     }
@@ -142,6 +141,7 @@ export default function TeacherDashboard() {
         }
         fetchTeacherData();
     }, []);
+
     /**
      * Ефект: підвантаження списку розділів (тем) при зміні обраного предмета
      */
@@ -232,31 +232,23 @@ export default function TeacherDashboard() {
     const filteredMaterials = materials.filter((mat) => {
         const rawType = (mat.type || "").toUpperCase();
 
-        // Фільтр за розділом (темою)
         if (filterTopicId && mat.topic?.id !== filterTopicId) return false;
-
-        // Фільтр за пошуковим рядком (назва)
         if (searchQuery && !mat.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
 
-        // Фільтр за датою створення
         if (filterDate) {
             const matDate = new Date(mat.createdAt).toISOString().split("T")[0];
             if (matDate !== filterDate) return false;
         }
 
-        // Розподіл за активними вкладками
         if (activeTab === "lessons") {
-            // У вкладці уроків відображаємо лише теорію
             return rawType === "THEORY";
         } else if (activeTab === "quizzes") {
-            // У вкладці тестів — усі види контрольних перевірок та домашні завдання
             return ["QUIZ", "CONTROL_WORK", "ATTESTATION", "HOMEWORK"].includes(rawType);
         }
 
         return true;
     });
 
-    // Відображення індикатора завантаження дашбуарду
     if (loading) {
         return (
             <div className="min-h-screen flex flex-col bg-slate-50">
@@ -282,7 +274,6 @@ export default function TeacherDashboard() {
                             Особистий кабінет вчителя • Керування навчальними матеріалами, тестами та оцінками
                         </p>
                     </div>
-                    {/* Швидкі дії: створення уроку або тесту */}
                     <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
                         <Link
                             href="/teacher/lessons/create"
@@ -357,7 +348,6 @@ export default function TeacherDashboard() {
                         📢 Оголошення та конкурси
                     </button>
 
-                    {/* Посилання на загальну бібліотеку матеріалів */}
                     <Link
                         href="/teacher/library/"
                         className="px-5 py-3 font-semibold text-sm rounded-t-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100/60 transition flex items-center gap-1.5 ml-auto"
@@ -370,7 +360,6 @@ export default function TeacherDashboard() {
                 {/* Вміст вкладок Уроків та Тестів */}
                 {(activeTab === "lessons" || activeTab === "quizzes") && (
                     <div className="space-y-6">
-                        {/* Блок панелі фільтрів та пошуку */}
                         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4">
                             <div className="flex justify-between items-center">
                                 <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -385,7 +374,6 @@ export default function TeacherDashboard() {
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                                {/* Пошуковий рядок */}
                                 <div className="lg:col-span-2">
                                     <label className="block text-xs font-semibold text-slate-500 mb-1">Пошук за назвою</label>
                                     <input
@@ -397,7 +385,6 @@ export default function TeacherDashboard() {
                                     />
                                 </div>
 
-                                {/* Фільтр за предметом */}
                                 <div>
                                     <label className="block text-xs font-semibold text-slate-500 mb-1">Предмет</label>
                                     <select
@@ -411,7 +398,6 @@ export default function TeacherDashboard() {
                                     </select>
                                 </div>
 
-                                {/* Фільтр за класом */}
                                 <div>
                                     <label className="block text-xs font-semibold text-slate-500 mb-1">Клас</label>
                                     <select
@@ -426,7 +412,6 @@ export default function TeacherDashboard() {
                                     </select>
                                 </div>
 
-                                {/* Фільтр за розділом */}
                                 <div>
                                     <label className="block text-xs font-semibold text-slate-500 mb-1">Розділ</label>
                                     <select
@@ -443,7 +428,6 @@ export default function TeacherDashboard() {
                             </div>
                         </div>
 
-                        {/* Список матеріалів із обробкою станів завантаження та порожнього результату */}
                         {materialsLoading ? (
                             <div className="text-center py-12 text-slate-400 text-sm bg-white rounded-2xl border">
                                 Завантаження списку...
@@ -470,7 +454,6 @@ export default function TeacherDashboard() {
                                             className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-400 transition shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
                                         >
                                             <div className="space-y-2 flex-grow">
-                                                {/* Бейджи типів матеріалу, предмета, класу та дати */}
                                                 <div className="flex flex-wrap items-center gap-2 text-xs">
                                                     {rawType === "CONTROL_WORK" ? (
                                                         <span className="font-bold px-2.5 py-0.5 rounded-md bg-purple-100 text-purple-800">
@@ -515,18 +498,15 @@ export default function TeacherDashboard() {
                                                     </span>
                                                 </div>
 
-                                                {/* Назва матеріалу */}
                                                 <h3 className="font-bold text-slate-900 text-base md:text-lg">
                                                     {mat.title}
                                                 </h3>
 
-                                                {/* Короткий зміст / опис */}
                                                 <p className="text-xs text-slate-500 line-clamp-2 max-w-4xl">
                                                     {isQuiz ? getQuizSummary(mat.content) : getLessonDescription(mat.content)}
                                                 </p>
                                             </div>
 
-                                            {/* Кнопки дій з матеріалом (перегляд, редагування, видалення) */}
                                             <div className="flex items-center gap-2 w-full md:w-auto justify-end border-t md:border-t-0 pt-3 md:pt-0 border-slate-100">
                                                 <Link
                                                     href={detailsUrl}
@@ -567,6 +547,12 @@ export default function TeacherDashboard() {
                     </div>
                 )}
 
+                {/* Вкладка Задачі дня */}
+                {activeTab === "tasks" && <TeacherDailyTasks />}
+
+                {/* Вкладка Оголошення та конкурси */}
+                {activeTab === "news" && <TeacherNewsTab />}
+
                 {/* Вкладка Журналу оцінок */}
                 {activeTab === "journal" && (
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-6">
@@ -606,20 +592,16 @@ export default function TeacherDashboard() {
                         </div>
                     </div>
                 )}
-                {/* Вкладка Задач дня */}
-                {activeTab === "tasks" && (
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                        <TeacherDailyTasks subjects={mySubjects} />
-                    </div>
-                )}
-                {/* Вкладка Оголошення та конкурси */}
-                {activeTab === "news" && (
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 ">
-                        <TeacherNewsTab />
-                    </div>
-                )}
             </main>
         </div>
     );
 }
 
+// 2. Головний експорт сторінки, обгорнутий у Suspense
+export default function TeacherDashboard() {
+    return (
+        <Suspense fallback={<div className="p-8 text-center text-slate-500 font-medium">Завантаження кабінету вчителя...</div>}>
+            <TeacherDashboardContent />
+        </Suspense>
+    );
+}

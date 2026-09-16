@@ -1,13 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { logError } from "@/lib/logger";
 
 export async function PATCH(
-    req: Request,
-    { params }: { params: { id: string } }
+    req: NextRequest,
+    context: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await context.params;
+
     try {
         const session = await getServerSession(authOptions);
         if (!session?.user?.id) {
@@ -20,7 +22,7 @@ export async function PATCH(
 
         const updatedTask = await prisma.dailyTask.update({
             where: {
-                id: params.id,
+                id, // 👈 Змінено params.id на id
                 authorId: session.user.id, // Гарантуємо, що вчитель архівує лише СВОЮ задачу
             },
             data: {

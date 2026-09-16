@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -26,8 +26,8 @@ import {logError} from "@/lib/logger";
  * ==============================================================================
  */
 export async function DELETE(
-    req: Request,
-    { params }: { params: { id: string } }
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> } // 👈 params тепер Promise
 ) {
     try {
         // 1. Перевірка наявності активної сесії
@@ -49,7 +49,7 @@ export async function DELETE(
             );
         }
 
-        const { id } = params;
+        const { id } = await params;
 
         // Перевірка наявності переданого ID
         if (!id) {

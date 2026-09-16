@@ -1,26 +1,28 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import {logError} from "@/lib/logger";
+import { logError } from "@/lib/logger";
 
 export async function POST(
-    req: Request,
-    { params }: { params: { id: string } }
+    req: NextRequest,
+    context: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await context.params;
+
     try {
-        const taskId = params.id;
+        const taskId = id; // 👈 Використовуємо отриманий id замість params.id
         const { commentId, teacherNote, bonusPoints } = await req.json();
 
         if (!commentId) {
             return NextResponse.json({ error: "Не вказано коментар" }, { status: 400 });
         }
 
-        // 1. Снимаем статус лучшего ответа со всех комментариев этой задачи
+        // 1. Знімаємо статус кращої відповіді з усіх коментарів цієї задачі
         await prisma.dailyTaskComment.updateMany({
             where: { taskId },
             data: { isBestAnswer: false },
         });
 
-        // 2. Отмечаем выбранный комментарий как лучший и сохраняем похвалу
+        // 2. Позначаємо обраний коментар як кращий та зберігаємо похвалу
         const updatedComment = await prisma.dailyTaskComment.update({
             where: { id: commentId },
             data: {
@@ -30,7 +32,7 @@ export async function POST(
             include: { author: true },
         });
 
-        // 3. Закрываем задачу (завершаем прием ответов)
+        // 3. Закриваємо задачу (завершуємо прийом відповідей)
         await prisma.dailyTask.update({
             where: { id: taskId },
             data: { isClosed: true },
@@ -41,7 +43,7 @@ export async function POST(
             message: "Переможця обрано успішно!",
             comment: updatedComment,
         });
-    } catch (error:any) {
+    } catch (error: any) {
         // Зберігаємо помилку у базі даних
         await logError({
             message: error.message || "Помилка вибору кращої відповіді",

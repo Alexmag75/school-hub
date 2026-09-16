@@ -1,16 +1,15 @@
-import { NextResponse } from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 import { prisma } from "@/lib/prisma";
 import {logError} from "@/lib/logger";
 
 // Отримати всі відповіді до задачи
 export async function GET(
-    req: Request,
-    { params }: { params: Promise<{ id: string }> }
+     req: NextRequest, context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id: taskId } = await params;
+        const { id } = await context.params;
         const comments = await prisma.dailyTaskComment.findMany({
-            where: { taskId },
+            where: { id },
             orderBy: { createdAt: "asc" },
             include: {
                 author: {
