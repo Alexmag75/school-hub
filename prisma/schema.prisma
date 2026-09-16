@@ -1,0 +1,544 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// Роли пользователей в системе
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+/// Типы учебных материалов в библиотеке
+enum MaterialType {
+  THEORY // Теоретический материал / Лекция
+  PRACTICE // Практическое задание
+  QUIZ // Интерактивный тест
+  CONTROL_WORK // Контрольная работа
+  ATTESTATION // Аттестация
+}
+
+/// Типы колонок в классном журнале
+enum ColumnType {
+  LESSON // Обычный урок / перепросмотр
+  TEST // Тестирование
+  ASSIGNMENT // Домашнее / практическое задание
+}
+
+/// Статус выполнения задания учеником
+enum StudentTaskStatus {
+  PENDING // Ожидает выполнения
+  COMPLETED // Выполнено / Оценено
+  OVERDUE // Просрочено
+}
+
+/// Статусы посещаемости урока
+enum AttendanceStatus {
+  PRESENT // Присутствовал
+  ABSENT // Отсутствовал
+  EXCUSED // Уважительная причина
+  LATE // Опоздал
+}
+
+/// Основная модель пользователя
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  lastName  String
+  fullName  String
+  password  String
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /// Класс, к которому прикреплен ученик
+  classId   String?
+  className Class?  @relation("StudentClass", fields: [classId], references: [id])
+
+  // --- НОВИЙ ЗВ'ЯЗОК УЧНЯ З ПІДГРУПАМИ ---
+  studentSubgroups SubjectGroup[] @relation("StudentSubgroups")
+  // ----------------------------------------
+
+  studentSubjects  Subject[]             @relation("StudentSubjects")
+  teachingSubjects Subject[]             @relation("TeacherSubjects")
+  teacherLoads     TeacherSubjectClass[]
+
+  submissions      Submission[]
+  chatMessages     ChatMessage[]
+  materials        Material[]
+  lessonProgresses LessonProgress[]
+  quizSubmissions  QuizSubmission[]
+  notifications    Notification[]
+  streak           UserStreak?
+  achievements     UserAchievement[]
+  createdTextbooks Textbook[]
+
+  studentGrades Grade[]      @relation("StudentGrades")
+  teacherGrades Grade[]      @relation("TeacherGrades")
+  attendance    Attendance[] @relation("StudentAttendance")
+
+  teacherAssignments TeacherAssignment[]
+
+  dailyTasks        DailyTask[]        @relation("CreatedDailyTasks")
+  dailyTaskComments DailyTaskComment[] @relation("AuthoredDailyTaskComments")
+
+  teacherNews TeacherNews[]
+}
+
+/// Учебный класс (например: 9-В)
+model Class {
+  id        String   @id @default(uuid())
+  name      String
+  year      Int
+  createdAt DateTime @default(now())
+
+  students           User[]                @relation("StudentClass")
+  assignments        Assignment[]
+  teacherLoads       TeacherSubjectClass[]
+  subjects           Subject[]             @relation("SubjectClasses")
+  textbooks          Textbook[]            @relation("TextbookClasses")
+  journalColumns     JournalColumn[]
+  teacherAssignments TeacherAssignment[]
+}
+
+/// Учебный предмет (Физика, Информатика и т.д.)
+model Subject {
+  id        String   @id @default(uuid())
+  title     String
+  createdAt DateTime @default(now())
+
+  hasGroups   Boolean        @default(false) // Чи ділиться предмет на групи
+  groupsCount Int            @default(2) // Кількість груп (наприклад, 2)
+  groups      SubjectGroup[] // Список створених підгруп
+
+  teacherLoads       TeacherSubjectClass[]
+  teachers           User[]                @relation("TeacherSubjects")
+  students           User[]                @relation("StudentSubjects")
+  materials          Material[]
+  classes            Class[]               @relation("SubjectClasses")
+  topics             Topic[]
+  textbooks          Textbook[]
+  grades             Grade[]
+  journalColumns     JournalColumn[]
+  teacherAssignments TeacherAssignment[]
+
+  dailyTasks DailyTask[]
+
+  teacherNews TeacherNews[]
+}
+
+/// Нагрузка учителей (Преподаватель — Предмет — Класс)
+model TeacherSubjectClass {
+  id        String  @id @default(uuid())
+  teacherId String
+  teacher   User    @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  classId   String
+  class     Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  // Вказуємо реляцію та її ім'я "GroupTeacherLoads"
+  subgroupId String?
+  subgroup   SubjectGroup? @relation("GroupTeacherLoads", fields: [subgroupId], references: [id], onDelete: Cascade)
+
+  @@unique([teacherId, subjectId, classId, subgroupId])
+}
+
+/// Учебный материал библиотеки (авторский контент преподавателя)
+model Material {
+  id        String       @id @default(uuid())
+  title     String
+  type      MaterialType @default(THEORY)
+  content   String       @db.LongText
+  videoUrl  String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  authorId String?
+  author   User?   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  assignments      Assignment[]
+  messages         ChatMessage[]
+  topicId          String?
+  topic            Topic?           @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  lessonProgresses LessonProgress[]
+  quizSubmissions  QuizSubmission[]
+  journalColumns   JournalColumn[]
+}
+
+/// Назначение учебного материала конкретному классу с дедлайном
+model Assignment {
+  id               String    @id @default(uuid())
+  deadline         DateTime?
+  timeLimitMinutes Int?
+  createdAt        DateTime  @default(now())
+
+  materialId String
+  material   Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  classId String
+  class   Class  @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  submissions Submission[]
+}
+
+/// Отправленное решение ученика по практическому заданию
+model Submission {
+  id             String    @id @default(uuid())
+  content        String?   @db.Text
+  fileUrls       Json?
+  startedAt      DateTime  @default(now())
+  submittedAt    DateTime?
+  score          Int?
+  teacherComment String?   @db.Text
+
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  studentId String
+  student   User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+/// Сообщения обсуждения/вопросов внутри конкретного урока
+model ChatMessage {
+  id        String   @id @default(uuid())
+  text      String   @db.Text
+  createdAt DateTime @default(now())
+
+  materialId String
+  material   Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  senderId String
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+/// Раздел учебной программы предмета
+model Topic {
+  id        String   @id @default(uuid())
+  title     String
+  createdAt DateTime @default(now())
+
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  materials Material[]
+}
+
+/// Фиксация прочтения/просмотра лекции учеником
+model LessonProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId  String
+  lesson    Material @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  isDone    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, lessonId])
+}
+
+/// Результат прохождения тестирования учеником
+model QuizSubmission {
+  id        String   @id @default(cuid())
+  quizId    String
+  quiz      Material @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  studentId String
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  score            Float
+  maxScore         Float
+  grade12          Int?
+  status           String @default("COMPLETED")
+  timeSpentSeconds Int
+
+  answers     QuizAnswer[]
+  submittedAt DateTime     @default(now())
+
+  @@index([studentId])
+  @@index([quizId])
+}
+
+/// Ответ ученика на конкретный вопрос теста
+model QuizAnswer {
+  id           String         @id @default(cuid())
+  submissionId String
+  submission   QuizSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  questionId   String
+  selectedOpts Json
+  textAnswer   String?
+  isCorrect    Boolean?
+  pointsEarned Float    @default(0)
+}
+
+/// Типы системных уведомлений
+enum NotificationType {
+  NEW_ASSIGNMENT
+  DEADLINE_WARNING
+  GRADE_RECEIVED
+  ACHIEVEMENT_UNLOCKED
+}
+
+/// Уведомление пользователя
+model Notification {
+  id          String           @id @default(uuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  message     String
+  type        NotificationType
+  isRead      Boolean          @default(false)
+  subjectName String?
+  link        String?
+  createdAt   DateTime         @default(now())
+
+  @@index([userId])
+}
+
+/// Стрик активности ученика (дней обучения подряд)
+model UserStreak {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currentStreak  Int      @default(0)
+  lastActiveDate DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+/// Справочник достижений системы (геймификация)
+model Achievement {
+  id          String            @id @default(uuid())
+  code        String            @unique
+  title       String
+  description String
+  icon        String
+  users       UserAchievement[]
+}
+
+/// Разблокированные достижения пользователя
+model UserAchievement {
+  id            String      @id @default(uuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  unlockedAt    DateTime    @default(now())
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
+/// Категории электронных книг и учебных материалов
+enum TextbookCategory {
+  TEXTBOOK
+  PROBLEM_BOOK
+  DICTIONARY
+  OLYMPIAD
+  PUZZLE
+  OTHER
+}
+
+/// Электронный учебник или пособие
+model Textbook {
+  id          String           @id @default(uuid())
+  title       String
+  author      String?
+  description String?          @db.Text
+  fileUrl     String
+  coverUrl    String?
+  category    TextbookCategory @default(TEXTBOOK)
+
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  createdById String?
+  createdBy   User?   @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  classId   String?
+  classes   Class[]  @relation("TextbookClasses")
+
+  @@index([subjectId])
+  @@index([category])
+}
+
+/// Колонка классного журнала
+model JournalColumn {
+  id        String     @id @default(cuid())
+  title     String
+  type      ColumnType
+  deadline  DateTime?
+  createdAt DateTime   @default(now())
+
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  classId String
+  class   Class  @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  /// Привязка к исходному уроку (при удалении урока остается null)
+  materialId String?
+  material   Material? @relation(fields: [materialId], references: [id], onDelete: SetNull)
+
+  grades     Grade[]
+  attendance Attendance[]
+}
+
+/// Оценка ученика за конкретную колонку журнала
+model Grade {
+  id      String            @id @default(cuid())
+  value   Int?
+  status  StudentTaskStatus @default(PENDING)
+  comment String?           @db.Text
+
+  studentId String
+  student   User   @relation("StudentGrades", fields: [studentId], references: [id], onDelete: Cascade)
+
+  teacherId String?
+  teacher   User?   @relation("TeacherGrades", fields: [teacherId], references: [id], onDelete: SetNull)
+
+  subjectId String?
+  subject   Subject? @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  columnId String
+  column   JournalColumn @relation(fields: [columnId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([columnId, studentId])
+}
+
+/// Отметка посещаемости ученика
+model Attendance {
+  id     String           @id @default(cuid())
+  status AttendanceStatus @default(PRESENT)
+
+  studentId String
+  student   User   @relation("StudentAttendance", fields: [studentId], references: [id], onDelete: Cascade)
+
+  columnId String
+  column   JournalColumn @relation(fields: [columnId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, columnId])
+}
+
+/// Закрепление преподавателя за предметом в классе
+model TeacherAssignment {
+  id        String   @id @default(cuid())
+  teacherId String
+  teacher   User     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([teacherId, subjectId, classId])
+}
+
+/// Задача дня от преподавателей
+model DailyTask {
+  id          String @id @default(uuid())
+  title       String
+  description String @db.Text
+
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  imageUrl  String?
+  authorId  String
+  author    User    @relation("CreatedDailyTasks", fields: [authorId], references: [id], onDelete: Cascade)
+
+  isActive Boolean @default(false)
+  isClosed Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  comments DailyTaskComment[]
+}
+
+/// Комментарии / Варианты решений учеников
+model DailyTaskComment {
+  id           String  @id @default(uuid())
+  text         String  @db.Text
+  isWinner     Boolean @default(false)
+  isBestAnswer Boolean @default(false)
+  teacherNote  String? @db.Text
+
+  taskId String
+  task   DailyTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  authorId String
+  author   User   @relation("AuthoredDailyTaskComments", fields: [authorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model TeacherNews {
+  id       String  @id @default(cuid())
+  title    String
+  content  String  @db.Text
+  imageUrl String? // Опціональне фото
+  fileUrl  String? // Опціональний файл для завантаження
+  fileName String? // Назва файлу для зручного скачування
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subjectId String?
+  subject   Subject? @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+}
+
+enum LogLevel {
+  INFO
+  WARN
+  ERROR
+}
+
+model SystemLog {
+  id      String   @id @default(uuid())
+  level   LogLevel @default(ERROR)
+  message String // Короткий опис помилки
+  stack   String?  @db.Text // Повний stack trace (де саме в коді впало)
+  source  String? // Маршрут (наприклад, "/api/news" або "Client: /dashboard")
+
+  // Контекст користувача (щоб розуміти, у кого виникла проблема)
+  userId    String?
+  userEmail String?
+  userRole  String?
+
+  userAgent String? // Браузер/пристрій
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([level])
+}
+
+/// Підгрупа предмета (наприклад: "1 група" для Інформатики)
+model SubjectGroup {
+  id        String  @id @default(uuid())
+  name      String // "1 група", "2 група"
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  students     User[]                @relation("StudentSubgroups")
+  // Додаємо ім'я реляції "GroupTeacherLoads"
+  teacherLoads TeacherSubjectClass[] @relation("GroupTeacherLoads")
+
+  createdAt DateTime @default(now())
+}

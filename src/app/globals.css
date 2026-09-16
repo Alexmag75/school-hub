@@ -1,0 +1,388 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary-color: #2563eb;
+  }
+
+  /* Автоматично міняємо колір виділення тексту */
+  ::selection {
+    background-color: var(--primary-color);
+    color: #ffffff;
+  }
+}
+
+/* Динамічні утиліти для використання унікального кольору */
+.bg-primary {
+  background-color: var(--primary-color) !important;
+}
+
+.text-primary {
+  color: var(--primary-color) !important;
+}
+
+.border-primary {
+  border-color: var(--primary-color) !important;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  html {
+    font-size: 18px; /* Базовый размер текста */
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  /*--font-mono: var(--font-geist-mono);*/
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+@layer utilities {
+  /* ==========================================================================
+     ДИНАМІЧНИЙ АКЦЕНТНИЙ КОЛІР ПЛАТФОРМИ
+     ========================================================================== */
+
+  /* Основні кнопки, тексти та рамки */
+  .bg-blue-600,
+  .bg-blue-500 {
+    background-color: var(--primary-color) !important;
+  }
+
+  .hover\:bg-blue-700:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 85%, black) !important;
+  }
+
+  .text-blue-600,
+  .text-blue-500 {
+    color: var(--primary-color) !important;
+  }
+
+  .border-blue-600,
+  .border-blue-500 {
+    border-color: var(--primary-color) !important;
+  }
+
+  .focus\:ring-blue-500:focus,
+  .focus\:border-blue-500:focus {
+    --tw-ring-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+  }
+
+  .bg-blue-50 {
+    background-color: color-mix(in srgb, var(--primary-color) 10%, white) !important;
+  }
+
+  .text-blue-700 {
+    color: color-mix(in srgb, var(--primary-color) 90%, black) !important;
+  }
+
+  /* ==========================================================================
+     АДАПТАЦІЯ ВІТАЛЬНОГО БЛОКУ ТА ПІДВАЛУ (FOOTER)
+     ========================================================================== */
+
+  .bg-slate-900,
+  .bg-slate-950,
+  footer {
+    background-color: color-mix(in srgb, var(--primary-color) 20%, #0f172a) !important;
+  }
+
+  .bg-blue-900,
+  .bg-blue-950 {
+    background-color: color-mix(in srgb, var(--primary-color) 35%, #0f172a) !important;
+  }
+
+  .from-blue-600,
+  .from-blue-700,
+  .from-blue-800 {
+    --tw-gradient-from: var(--primary-color) !important;
+    --tw-gradient-to: color-mix(in srgb, var(--primary-color) 70%, #000000) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+  }
+
+  .to-indigo-700,
+  .to-blue-800,
+  .to-indigo-900 {
+    --tw-gradient-to: color-mix(in srgb, var(--primary-color) 60%, #000000) !important;
+  }
+
+  footer .border-slate-800,
+  .border-blue-500\/20 {
+    border-color: color-mix(in srgb, var(--primary-color) 30%, transparent) !important;
+  }
+
+  /* ==========================================================================
+     АДАПТАЦІЯ ТРИТОЧКОВОГО ГРАДІЄНТА ТА ПЛАШОК ВІТАЛЬНОГО БЛОКУ
+     ========================================================================== */
+
+  .from-blue-900 {
+    --tw-gradient-from: color-mix(in srgb, var(--primary-color) 45%, #0f172a) !important;
+    --tw-gradient-to: color-mix(in srgb, var(--primary-color) 45%, transparent) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via, var(--tw-gradient-to)), var(--tw-gradient-to) !important;
+  }
+
+  .via-blue-800 {
+    --tw-gradient-to: color-mix(in srgb, var(--primary-color) 35%, transparent) !important;
+    --tw-gradient-via: color-mix(in srgb, var(--primary-color) 35%, #0f172a) !important;
+  }
+
+  .to-slate-900 {
+    --tw-gradient-to: #0f172a !important;
+  }
+
+  .bg-blue-500\/20 {
+    background-color: color-mix(in srgb, var(--primary-color) 25%, transparent) !important;
+  }
+
+  .text-blue-200 {
+    color: color-mix(in srgb, var(--primary-color) 30%, #e2e8f0) !important;
+  }
+
+  .border-blue-400\/30 {
+    border-color: color-mix(in srgb, var(--primary-color) 40%, transparent) !important;
+  }
+
+  /* ==========================================================================
+     ПОСИЛАННЯ, НАВІГАЦІЯ ТА СТАНИ HOVER
+     ========================================================================== */
+
+  .hover\:text-blue-600:hover,
+  .hover\:text-blue-500:hover,
+  .hover\:text-blue-700:hover {
+    color: var(--primary-color) !important;
+  }
+
+  .hover\:bg-blue-50:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 10%, white) !important;
+  }
+
+  .hover\:bg-blue-100:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 18%, white) !important;
+  }
+
+  .bg-blue-500\/10,
+  .bg-blue-600\/10,
+  .bg-blue-100 {
+    background-color: color-mix(in srgb, var(--primary-color) 12%, white) !important;
+  }
+
+  .text-blue-800,
+  .text-blue-900 {
+    color: color-mix(in srgb, var(--primary-color) 90%, black) !important;
+  }
+
+  .border-blue-100,
+  .border-blue-200,
+  .border-blue-300 {
+    border-color: color-mix(in srgb, var(--primary-color) 30%, transparent) !important;
+  }
+
+  .hover\:border-blue-500:hover,
+  .hover\:border-blue-600:hover {
+    border-color: var(--primary-color) !important;
+  }
+
+  /* ==========================================================================
+     ПЕРЕВИЗНАЧЕННЯ АМБЕР/ЖОВТИХ КНОПОК ТА ЕЛЕМЕНТІВ (Архів задач тощо)
+     ========================================================================== */
+
+  .bg-amber-50,
+  .bg-yellow-50,
+  .bg-amber-100\/50,
+  .bg-amber-100 {
+    background-color: color-mix(in srgb, var(--primary-color) 10%, white) !important;
+  }
+
+  .text-amber-700,
+  .text-amber-800,
+  .text-amber-900,
+  .text-yellow-700,
+  .text-yellow-800 {
+    color: color-mix(in srgb, var(--primary-color) 85%, black) !important;
+  }
+
+  .border-amber-200,
+  .border-amber-300,
+  .border-yellow-200,
+  .border-yellow-300 {
+    border-color: color-mix(in srgb, var(--primary-color) 35%, transparent) !important;
+  }
+
+  .hover\:bg-amber-100:hover,
+  .hover\:bg-amber-200:hover,
+  .hover\:bg-yellow-100:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 18%, white) !important;
+  }
+
+  .hover\:text-amber-900:hover,
+  .hover\:text-amber-800:hover {
+    color: var(--primary-color) !important;
+  }
+
+  /* ==========================================================================
+     ФІКС СТИЛІВ ПОСИЛАНЬ ТА КАРТОК РЕСУРСІВ (На Урок, LearningApps тощо)
+     ========================================================================== */
+
+  a,
+  a:visited,
+  a:hover,
+  a:active {
+    color: inherit;
+  }
+
+  a:not(.text-white):hover {
+    color: var(--primary-color) !important;
+  }
+
+  .border-blue-500,
+  .border-blue-400,
+  .border-indigo-500,
+  .border-indigo-400 {
+    border-color: var(--primary-color) !important;
+  }
+
+  .text-blue-600,
+  .text-indigo-600,
+  .text-purple-600 {
+    color: var(--primary-color) !important;
+  }
+
+  .text-emerald-500,
+  .text-emerald-600,
+  .text-purple-500,
+  .text-amber-500,
+  .text-yellow-500 {
+    color: var(--primary-color) !important;
+  }
+  /* Перевизначаємо груп-ховер синього кольору для Tailwind v4 */
+  .group:hover .group-hover\:text-blue-600,
+  .hover\:border-blue-300:hover {
+    color: var(--primary-color) !important;
+    border-color: color-mix(in srgb, var(--primary-color) 40%, transparent) !important;
+  }
+}

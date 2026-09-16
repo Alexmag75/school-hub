@@ -1,0 +1,14 @@
+{
+  "schoolName": "ОЗ «Болградський ліцей»",
+  "academicYear": "2026-2027",
+  "maxFileSizeMB": 15,
+  "allowedExtensions": ".pdf, .docx, .png, .jpg, .zip, .sb3, .xlsx, .pptx, .svg, .py, .rar",
+  "maintenanceMode": false,
+  "address": "м. Болград, вул. Ізмаїльська, 1а",
+  "website": "https://myschool.best",
+  "email": "licey4@myschool.best",
+  "phone": "+38 (04846) 4-13-26",
+  "allowRegistration": true,
+  "primaryColor": "#2563eb",
+  "fontSize": "large"
+}
